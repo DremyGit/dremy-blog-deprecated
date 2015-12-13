@@ -1,4 +1,4 @@
-var  mongoose = require( 'mongoose');
-var  BlogSchema = require( '../schemas/BlogSchema');
+const mongoose    = require( 'mongoose');
+const BlogSchema  = require( '../schemas/BlogSchema');
 
 module.exports = mongoose.model('Blog', BlogSchema);

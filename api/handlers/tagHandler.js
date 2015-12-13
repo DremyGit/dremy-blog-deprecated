@@ -1,5 +1,5 @@
-const Tag = require('../models/Tag');
-const marked = require('marked');
+const marked  = require('marked');
+const Tag     = require('../models/Tag');
 
 let tagHandler = {};
 

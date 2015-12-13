@@ -8,6 +8,8 @@ let CommentSchema = new Schema({
   time:         {type: Date,      default: Date.now},
   blog:         {type: ObjectId,  required: true, ref: 'Blog'},
   target:       {type: ObjectId,  default: null}
+}, {
+  versionKey: false
 })
 
 CommentSchema.statics = {
@@ -25,7 +27,7 @@ CommentSchema.statics = {
       .exec(callback)
   },
 
-  getCommentByBlogId(blogId, callback) {
+  getCommentsByBlogId(blogId, callback) {
     return this
       .find({blog: blogId})
       .exec(callback)

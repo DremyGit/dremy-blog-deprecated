@@ -1,8 +1,9 @@
-const Blog = require('../models/Blog');
+const Boom    = require('boom');
+const marked  = require('marked');
+const _       = require('underscore');
+const Escape  = require('../utils/escape');
+const Blog    = require('../models/Blog');
 const Comment = require('../models/Comment');
-const Boom = require('boom');
-const marked = require('marked');
-const _ = require('underscore');
 
 let commentHandler = {};
 
@@ -10,11 +11,7 @@ let commentHandler = {};
 
 
 commentHandler.getAllComments = (request, reply) => {
-
-  //const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0, _id: 0};
-
-  Comment.getAllComments( (err, comments) => {
-
+  Comment.getAllComments( (err, fields, comments) => {
     if (err) {
       console.log(err);
       return reply(Boom.internal());
@@ -28,41 +25,29 @@ commentHandler.getAllComments = (request, reply) => {
 
 
 commentHandler.getComment = (request, reply) => {
-
   let id = request.params.id;
 
   Comment.getCommentById(id, (err, comment) => {
-
     if (err) {
       console.log(err);
       return reply(Boom.internal());
     }
+
     reply(comment);
   })
-
 }
 
 
 
-commentHandler.getCommentsByBlogTitle = (request, reply) => {
+commentHandler.getCommentsByBlogId = (request, reply) => {
+  let blogId = request.params.blog_id;
 
-  let title = request.params.title;
+  Comment.getCommentsByBlogId(blogId, (err, comment) => {
+    let obj = {};
 
-  //const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0, _id: 0};
-
-  Blog.getBlogByTitle(title, {_id: 1}, (err, blog) => {
-    if (blog === null) {
-      return reply(Boom.notFound());
-    }
-    Comment.getCommentByBlogId(blog._id, (err, comment) => {
-
-      let obj = {};
-
-      comment.forEach( item => obj[item._id] = item );
-
-      reply(obj);
-    });
-  })
+    comment.forEach( item => obj[item._id] = item );
+    reply(obj);
+  });
 };
 
 
@@ -74,8 +59,8 @@ commentHandler.addComment = (request, reply) => {
   let target = request.query.target;
 
   let _comment = new Comment({
-    username: form.username,
-    content: form.content,
+    username: Escape(form.username),
+    content: Escape(form.content),
     blog: blogId,
     target: target
   });

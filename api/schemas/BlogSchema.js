@@ -12,24 +12,30 @@ let BlogSchema = new Schema({
   tag:          {type: ObjectId,  ref: 'Tag'},
   picture:      {type: String},
   status:       {type: Number,    default: 1}
+}, {
+  versionKey: false
 });
 
 BlogSchema.statics = {
 
-  // For customer
-  getAllBlog(fields, callback) {
+
+
+  getBlogs(param, fields, page, callback) {
     return this
-      .find({}, fields)
-      .populate('tag', {__v: 0, _id: 0})
-      .exec(callback);
+      .find(param, fields)
+      .skip(page.offset)
+      .limit(page.limit)
+      .populate('tag')
+      .exec(callback)
   },
 
-  getBlogByTitle(title, fields, callback) {
+  getBlog(param, fields, callback) {
     return this
-      .findOne({title_short: title}, fields)
-      .populate('tag', {__v: 0, _id: 0})
-      .exec(callback);
+      .findOne(param, fields)
+      .populate('tag', {_id: 0})
+      .exec(callback)
   },
+
 
   deleteBlog(id, callback) {
     return this

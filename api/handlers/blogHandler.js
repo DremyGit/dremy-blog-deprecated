@@ -1,9 +1,14 @@
-const Blog = require('../models/Blog');
-const Boom = require('boom');
-const marked = require('marked');
-const _ = require('underscore');
+const Boom    = require('boom');
+const marked  = require('marked');
+const _       = require('underscore');
+const Tag     = require('../models/Tag');
+const Blog    = require('../models/Blog');
+const Page    = require('../utils/Page');
+
+
 
 let blogHandler = {};
+
 
 
 blogHandler.options = (request, reply) => {
@@ -19,29 +24,51 @@ blogHandler.index = (request, reply) => {
 
 blogHandler.getBlogs = (request, reply) => {
 
-  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0};
+  const tagName   = request.query.tag_name;
+  const blogTitle = request.query.blog_title;
+  const fields    = request.auth.isAuthenticated ? null : {source: 0};
+  const page = new Page(request.query);
 
-  Blog.getAllBlog(fields, (err, blogs) => {
 
-    let obj = {};
-    blogs.forEach( item => obj[item.title_short] = item );
-    reply(obj);
-  })
+  if (blogTitle) {
+    return Blog.getBlog({title_short: blogTitle}, fields, (err, blog) => {
+      if (blog == null) {
+        return reply(Boom.notFound())
+      }
+      return reply(blog);
+    });
+  }
+
+  if (tagName) {
+    return Tag.getTagByName(tagName, (err, tag) => {
+      if (tag == null) {
+        return reply(Boom.notFound())
+      }
+      sendBlogs({tag: tag.id});
+    })
+  }
+  sendBlogs({});
+
+  function sendBlogs(param) {
+    Blog.getBlogs(param, fields, page, (err, blogs) => {
+      let obj = {};
+      blogs.forEach(item => obj[item._id] = item);
+      return reply(obj);
+    })
+  }
 };
 
 
 
-blogHandler.getBlogByTitle = (request, reply) => {
+blogHandler.getBlogById = (request, reply) => {
 
-  let title = request.params.title;
+  const fields = request.auth.isAuthenticated ? null : {source: 0};
 
-  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0};
-
-  Blog.getBlogByTitle(title, fields, (err, blog) => {
-    if (blog === null) {
+  Blog.getBlog({_id: request.params.id}, fields, (err, blog) => {
+    if (blog == null) {
       return reply(Boom.notFound());
     }
-    reply(blog);
+    return reply(blog);
   })
 
 };
@@ -51,18 +78,17 @@ blogHandler.getBlogByTitle = (request, reply) => {
 blogHandler.addBlog = (request, reply) => {
 
   let form = request.payload;
-
-  let a = new Blog({
-    title: form.title,
-    title_short: form.title_short,
-    summary: form.summary,
-    source: form.source,
-    html: marked(form.source),
-    time: form.time,
-    tag: form.tag_id,
-    picture: form.picture
+  let _blog = new Blog({
+    title:        form.title,
+    title_short:  form.title_short,
+    summary:      form.summary,
+    source:       form.source,
+    html:         marked(form.source),
+    time:         form.time,
+    tag:          form.tag_id,
+    picture:      form.picture
   });
-  a.save((err, project) => {
+  _blog.save((err, project) => {
     if (err) {
       console.log(err);
       return reply(Boom.badData());
@@ -76,7 +102,7 @@ blogHandler.addBlog = (request, reply) => {
 
 blogHandler.updateBlog = (request, reply) => {
 
-  let id = request.params.id;
+  let id   = request.params.id;
   let form = request.payload;
   Blog.findById(id, (err, blog) => {
     if (err) {

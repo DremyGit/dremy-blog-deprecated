@@ -5,6 +5,8 @@ const ObjectId = Schema.Types.ObjectId;
 let AdminSchema = new Schema({
   username: {type: String, required: true},
   password: {type: String, required: true}
+}, {
+  versionKey: false
 })
 
 AdminSchema.statics = {

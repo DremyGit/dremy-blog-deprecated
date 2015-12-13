@@ -1,4 +1,4 @@
-var  mongoose = require( 'mongoose');
-var  TagSchema = require( '../schemas/TagSchema');
+const mongoose  = require( 'mongoose');
+const TagSchema = require( '../schemas/TagSchema');
 
 module.exports = mongoose.model('Tag', TagSchema);

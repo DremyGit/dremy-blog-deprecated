@@ -1,6 +1,6 @@
-const authHandler    =  require('./handlers/authorization');
-const blogHandler    =  require('./handlers/blogHandler');
 const tagHandler     =  require('./handlers/tagHandler');
+const blogHandler    =  require('./handlers/blogHandler');
+const authHandler    =  require('./handlers/authorization');
 const defaultHandler =  require('./handlers/defaultHandler');
 const commentHandler =  require('./handlers/commentHandler');
 
@@ -27,11 +27,11 @@ module.exports = [
 
   // Blogs Router
 
-  // Get blogs
+  // Get blogs, optional param: tag_name, blog_title
   {method: 'GET',     path: '/blogs',         handler: blogHandler.getBlogs},
 
-  // Get blog by title
-  {method: 'GET',     path: '/blogs/{title}', handler: blogHandler.getBlogByTitle},
+  // Get blog by id
+  {method: 'GET',     path: '/blogs/{id}', handler: blogHandler.getBlogById},
 
   // Add new blog, payload: blog object
   {method: 'POST',    path: '/blogs',         handler: blogHandler.addBlog,       config: {auth: 'admin'}},
@@ -52,7 +52,7 @@ module.exports = [
   {method: 'GET',     path: '/comments/{id}', handler: commentHandler.getComment,     config: {auth: 'admin'}},
 
   // Get comments by blog title
-  {method: 'GET',     path: '/blogs/{title}/comments', handler: commentHandler.getCommentsByBlogTitle},
+  {method: 'GET',     path: '/blogs/{blog_id}/comments', handler: commentHandler.getCommentsByBlogId},
 
   // Add new comment, url param: blog_id
   {method: 'POST',    path: '/comments',      handler: commentHandler.addComment},
@@ -67,7 +67,7 @@ module.exports = [
   {method: 'GET',     path: '/tags',          handler: tagHandler.getTags},
 
   // Get tags by id
-  {method: 'GET',     path: '/tags/{name}',   handler: tagHandler.getTagById},
+  {method: 'GET',     path: '/tags/{id}',   handler: tagHandler.getTagById},
 
   // Add new tag, payload: tag object
   {method: 'POST',    path: '/tags',          handler: tagHandler.addTag,         config: {auth: 'admin'}},
@@ -76,8 +76,9 @@ module.exports = [
   {method: 'PUT',     path: '/tags/{id}',     handler: tagHandler.updateTag,      config: {auth: 'admin'}},
 
   // Delete tag
-  {method: 'DELETE',  path: '/tags/{id}',     handler: tagHandler.deleteTag,      config: {auth: 'admin'}}
+  {method: 'DELETE',  path: '/tags/{id}',     handler: tagHandler.deleteTag,      config: {auth: 'admin'}},
 
+  {method: 'POST',    path: '/test',          handler: defaultHandler.test, config: {auth: false}}
 
 ]
 
