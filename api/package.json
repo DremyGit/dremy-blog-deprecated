@@ -1,0 +1,25 @@
+{
+  "name": "dremy-blog-api",
+  "version": "0.1.0",
+  "description": "The RESTful API for dremy-blog",
+  "main": "app.js",
+  "dependencies": {
+    "boom": "^3.0.0",
+    "good": "^6.4.0",
+    "good-console": "^5.2.0",
+    "hapi": "^11.1.2",
+    "hapi-auth-jwt2": "^5.2.1",
+    "jsonwebtoken": "^5.4.1",
+    "marked": "^0.3.5",
+    "mongoose": "^4.3.1",
+    "redis": "^2.4.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node --es_staging --use-strict --harmony --harmony_shipping --harmony_modules --harmony_array_includes --harmony_regexps --harmony_proxies --harmony_sloppy --harmony_unicode_regexps --harmony_reflect --harmony_destructuring --harmony_sharedarraybuffer --harmony_atomics --harmony_new_target --harmony_tostring --harmony_concat_spreadable --harmony_rest_parameters --harmony_spreadcalls --harmony_spread_arrays --harmony_arrow_functions --harmony_computed_property_names --harmony_unicode --harmony_object app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dremy",
+  "license": "GPL-3.0"
+}
