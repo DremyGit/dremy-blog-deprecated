@@ -19,14 +19,12 @@ blogHandler.index = (request, reply) => {
 
 blogHandler.getBlogs = (request, reply) => {
 
-  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0, _id: 0};
+  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0};
 
   Blog.getAllBlog(fields, (err, blogs) => {
 
     let obj = {};
-    blogs.map( (item, index) => {
-      obj[item.title_short] = item;
-    })
+    blogs.forEach( item => obj[item.title_short] = item );
     reply(obj);
   })
 };
@@ -37,7 +35,7 @@ blogHandler.getBlogByTitle = (request, reply) => {
 
   let title = request.params.title;
 
-  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0, _id: 0};
+  const fields = request.auth.isAuthenticated ? null : {source: 0, __v: 0};
 
   Blog.getBlogByTitle(title, fields, (err, blog) => {
     if (blog === null) {
