@@ -2,8 +2,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import blogApp from './reducers/BlogReducer';
 import APP from './components/router/Router.jsx';
-//import BlogListPage from './components/blogListPage/BlogListPage.jsx';
-
 
 render(
   <APP />,

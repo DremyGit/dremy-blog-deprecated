@@ -3,55 +3,34 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import Ajax from '../../utils/ajax';
-import { getBlog } from '../../actions/BlogAction'
-import { store } from '../../stores/store';
+import { receiveBlogs, fetchBlogs } from '../../actions/BlogAction'
 
 export default class BlogListPage extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      fetching: false
+    }
   }
 
   componentDidMount() {
-    const data = {
-      "566d2fe2f132bd912d12b414": {
-        "_id": "566d2fe2f132bd912d12b414",
-        "tag": {
-          "_id": "566d2fcef132bd912d12b413",
-          "name_short": "test",
-          "name": "test"
-        },
-        "status": 1,
-        "time": "2015-12-13T15:45:21.388Z",
-        "summary": "summary",
-        "title_short": "testing",
-        "title": "测试拉"
-      },
-      "566d56a2ef16024a371dc0e7": {
-        "_id": "566d56a2ef16024a371dc0e7",
-        "tag": {
-          "_id": "566d2fcef132bd912d12b413",
-          "name_short": "test",
-          "name": "test"
-        },
-        "status": 1,
-        "time": "2015-12-13T15:45:21.389Z",
-        "summary": "summary",
-        "title_short": "testing",
-        "title": "测试拉"
-      },
-    };
-
-    store.dispatch(getBlog(data))
+    const { dispatch, router } = this.props;
+    dispatch(fetchBlogs(router.params.page || '1'));
   }
 
+
   render() {
-    const {blog: {blogs}} = this.props;
+    const {blog, router} = this.props;
+    const blogs = blog.blogs;
+    const page = (router.params.page || '1');
+
+    if (typeof blog.page[page] == 'undefined') {
+      return (<h1>加载中</h1>)
+    }
     let items = [];
-
-    for (let id in blogs) {
-
-      items.push(<li key={id}><Link to={'/blog/' + blogs[id].title_short}>{blogs[id].title}</Link></li>);
+    for (let id of blog.page[page]) {
+      items.push(<li key={id}><Link to={`/blog/${blogs[id].title_short}`}>{blogs[id].title}</Link></li>);
     }
 
     return (
@@ -60,6 +39,7 @@ export default class BlogListPage extends React.Component {
         <ul>
           {items}
         </ul>
+        <Link to={`/blog/page/${+page + 1}`}>下一页</Link>
       </div>
     )
   }

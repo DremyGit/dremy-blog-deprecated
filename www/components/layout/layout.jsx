@@ -10,11 +10,12 @@ class App extends React.Component {
     return (
       <div>
         <Navigation />
-        {React.cloneElement(this.props.children, { ...props})}
+        <div key={this.props.router.location.pathname}>
+          {React.cloneElement(this.props.children, { ...props })}
+        </div>
       </div>
     )
   }
-
 }
 
 export default connect(state => state)(App)
