@@ -1,16 +1,20 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
 import Navigation from '../navigation/Navigation.jsx';
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   render() {
+    const { ...props } = this.props
     return (
       <div>
         <Navigation />
-        {this.props.children}
+        {React.cloneElement(this.props.children, { ...props})}
       </div>
     )
   }
 
 }
+
+export default connect(state => state)(App)

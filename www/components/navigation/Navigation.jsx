@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+
 require('./style.scss');
 
 export default class Navigation extends React.Component {

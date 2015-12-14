@@ -1,11 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {Provider} from 'react-redux';
-import Router from './components/router/Router.jsx';
+import blogApp from './reducers/BlogReducer';
+import APP from './components/router/Router.jsx';
+//import BlogListPage from './components/blogListPage/BlogListPage.jsx';
 
 
 render(
-  <Router />,
+  <APP />,
   document.getElementById('app')
 )
 
