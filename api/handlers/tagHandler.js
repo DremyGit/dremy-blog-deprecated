@@ -8,12 +8,7 @@ let tagHandler = {};
 
 tagHandler.getTags = (request, reply) => {
   Tag.getAllTag( (err, tags) => {
-
-    let obj = {};
-    tags.map( (item, index) => {
-      obj[item.name_short] = item;
-    });
-    reply(obj);
+    reply(tags);
   })
 }
 

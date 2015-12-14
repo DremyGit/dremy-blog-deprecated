@@ -51,9 +51,7 @@ blogHandler.getBlogs = (request, reply) => {
 
   function sendBlogs(param) {
     Blog.getBlogs(param, fields, page, (err, blogs) => {
-      let obj = {};
-      blogs.forEach(item => obj[item._id] = item);
-      return reply(obj);
+      return reply(blogs);
     })
   }
 };
@@ -84,7 +82,6 @@ blogHandler.addBlog = (request, reply) => {
     summary:      form.summary,
     source:       form.source,
     html:         marked(form.source),
-    time:         form.time,
     tag:          form.tag_id,
     picture:      form.picture
   });

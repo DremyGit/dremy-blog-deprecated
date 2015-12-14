@@ -26,6 +26,7 @@ BlogSchema.statics = {
       .skip(page.offset)
       .limit(page.limit)
       .populate('tag')
+      .sort({'_id': -1})
       .exec(callback)
   },
 

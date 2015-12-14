@@ -7,9 +7,6 @@ const Comment = require('../models/Comment');
 
 let commentHandler = {};
 
-
-
-
 commentHandler.getAllComments = (request, reply) => {
   Comment.getAllComments( (err, fields, comments) => {
     if (err) {
@@ -17,9 +14,7 @@ commentHandler.getAllComments = (request, reply) => {
       return reply(Boom.internal());
     }
 
-    let obj = {};
-    comments.forEach( item => obj[item._id] = item );
-    reply(obj);
+    reply(comments);
   })
 };
 
@@ -42,11 +37,8 @@ commentHandler.getComment = (request, reply) => {
 commentHandler.getCommentsByBlogId = (request, reply) => {
   let blogId = request.params.blog_id;
 
-  Comment.getCommentsByBlogId(blogId, (err, comment) => {
-    let obj = {};
-
-    comment.forEach( item => obj[item._id] = item );
-    reply(obj);
+  Comment.getCommentsByBlogId(blogId, (err, comments) => {
+    reply(comments);
   });
 };
 
@@ -69,7 +61,7 @@ commentHandler.addComment = (request, reply) => {
       console.log(err);
       return reply(Boom.badData());
     }
-    reply({comment}).code(201);
+    reply(comment).code(201);
   });
 
 };
