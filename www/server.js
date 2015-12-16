@@ -12,13 +12,6 @@ var server = new WebpackDevServer(webpack(config), {
   noInfo: false
 })
 
-server.listen(3000, 'localhost', function (err, result) {
-  if (err) {
-    console.log(err);
-  }
-
-  console.log('Listening at localhost:3000');
-});
 
 server.app.use(function pushStateHook(req, res, next) {
   var ext = path.extname(req.url);
@@ -27,4 +20,12 @@ server.app.use(function pushStateHook(req, res, next) {
   } else {
     next();
   }
+});
+
+server.listen(3000, 'localhost', function (err, result) {
+  if (err) {
+    console.log(err);
+  }
+
+  console.log('Listening at localhost:3000');
 });

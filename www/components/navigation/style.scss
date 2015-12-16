@@ -1,7 +1,20 @@
-a {
-  color: #9b86fc;
+nav {
+  position: fixed;
+  background-color: #74B0E4;
+  width: 80%;
+  height: 100%;
+  top: 0;
+  visibility: hidden;
+  z-index: 2000;
 
-  &:hover {
-    color: #40a071;
+  a {
+    color: #695090;
+
+    &:hover {
+      color: #40a071;
+    }
   }
 }
+
+
+

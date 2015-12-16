@@ -3,12 +3,6 @@ import { render } from 'react-dom';
 import blogApp from './reducers/BlogReducer';
 import APP from './components/router/Router.jsx';
 
-render(
-  <APP />,
-  document.getElementById('app')
-)
-
-
 (function(global) {
   var console_log = global.console.log
   global.console.log = function() {
@@ -21,3 +15,10 @@ render(
     }
   }
 })(window)
+
+render(
+  <APP />,
+  document.getElementById('app')
+)
+
+

@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 
 module.exports = {
@@ -14,7 +15,8 @@ module.exports = {
     filename: 'app.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin("style.css")
   ],
   module: {
     loaders: [
@@ -30,13 +32,17 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: 'style!css!sass?sourceMap'
+        loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
+        //loader: 'style!css?sourceMap!sass?sourceMap'
       },
       {
         test: /\.(jpe?g|png|svg)/,
         loader: 'url?limit=8192'
       }
     ]
+  },
+  sassLoader: {
+    outputStyle: 'expanded'
   }
 
 }

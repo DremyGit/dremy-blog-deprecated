@@ -1,13 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-require('./style.scss');
+import './style.scss';
 
 export default class Navigation extends React.Component {
 
+  constructor(props) {
+    super(props)
+  }
+
   render() {
+
+    const navStyle = {
+      visibility: this.props.leftNavShow ? 'visible' : 'hidden'
+    }
+    console.log(navStyle);
+
     return (
-      <nav>
+      <nav style={navStyle}>
         <div className="container">
           <span>Dremy 博客</span>
           <ul>
