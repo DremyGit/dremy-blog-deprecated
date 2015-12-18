@@ -3,31 +3,37 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
     './entry.jsx',
   ],
   output: {
-    path:  __dirname + '/output/js/',
+    path:  __dirname + '/dist/js/',
     publicPath: '/js/',
     filename: 'app.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin("style.css")
+    new ExtractTextPlugin("style.css"),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ],
   module: {
     loaders: [
       {
         test: /\.jsx$/,
-        loader: 'react-hot!babel?presets[]=react,presets[]=es2015,presets[]=stage-0',
+        loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-0',
         exclude: /node_modules/
       },
       {
         test: /\.js$/,
-        loader: 'react-hot!babel?presets[]=es2015,presets[]=stage-0',
+        loader: 'babel?presets[]=es2015,presets[]=stage-0',
         exclude: /node_modules/
       },
       {
@@ -35,13 +41,13 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
       },
       {
-        test: /\.(jpe?g|png|svg)/,
+        test: /\.(jpe?g|png|svg|gif)/,
         loader: 'url?limit=8192'
       }
     ]
   },
   sassLoader: {
-    outputStyle: 'expanded'
+    outputStyle: 'compressed'
   }
 
 }

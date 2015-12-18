@@ -4,7 +4,7 @@ var path = require('path');
 var config = require('./webpack.config');
 
 var server = new WebpackDevServer(webpack(config), {
-  contentBase: "dist",
+  contentBase: "output",
   publicPath: '/js/',
   hot: true,
   historyApiFallback: true,
