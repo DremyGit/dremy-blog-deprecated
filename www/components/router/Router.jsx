@@ -34,7 +34,7 @@ export default class DremyBlog extends React.Component {
             <Route path="/" component={App}>
               <IndexRoute component={HomePage} />
               <Route path="blog" component={BlogListPage}/>
-              <Route path="blog/:id" component={BlogDetailPage} />
+              <Route path="blog/:title" component={BlogDetailPage} />
               <Route path="blog/page/:page" component={BlogListPage}/>
             </Route>
           </ReduxRouter>

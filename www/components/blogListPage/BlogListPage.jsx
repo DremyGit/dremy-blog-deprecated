@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import Ajax from '../../utils/ajax';
-import { receiveBlogs, fetchBlogs } from '../../actions/BlogAction'
+import { fetchBlogList } from '../../actions/BlogAction'
 
 export default class BlogListPage extends React.Component {
 
@@ -16,20 +16,20 @@ export default class BlogListPage extends React.Component {
 
   componentDidMount() {
     const { dispatch, router } = this.props;
-    dispatch(fetchBlogs(router.params.page || '1'));
+    dispatch(fetchBlogList(router.params.page || '1'));
   }
 
 
   render() {
     const {blog, router} = this.props;
-    const blogs = blog.blogs;
+    const blogs = blog.blogList;
     const page = (router.params.page || '1');
 
-    if (typeof blog.page[page] == 'undefined') {
+    if (typeof blogs == 'undefined') {
       return (<h1>加载中</h1>)
     }
     let items = [];
-    for (let id of blog.page[page]) {
+    for (let id in blogs) {
       items.push(<li key={id}><Link to={`/blog/${blogs[id].title_short}`}>{blogs[id].title}</Link></li>);
     }
 

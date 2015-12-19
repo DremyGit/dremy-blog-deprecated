@@ -1,34 +1,27 @@
 import React from 'react';
-import { fetchBlogs } from '../../actions/BlogAction';
+import { fetchBlog } from '../../actions/BlogAction';
 
 export default class BlogDetailPage extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    const { router, blog, dispatch } = this.props;
-    const theBlog = blog.blogs[router.params.id];
-    if (!theBlog) {
-      dispatch(fetchBlogs());
-    }
+    const { router, dispatch } = this.props;
+    dispatch(fetchBlog(router.params.title))
   }
 
   render() {
 
-    const { router, blog} = this.props;
-    const theBlog = blog.blogs[router.params.id];
-    if (!theBlog) {
-      return (<div>加载中</div>)
+    const blog = this.props.blog.blog;
+
+    if (!blog) {
+      return (<h1>NULL</h1>);
     }
 
     return (
       <div>
-        <h1>Blog Detail Page</h1>
-        <h1>{theBlog.title}</h1>
+        <h1>blog Detail Page</h1>
+        <h1>{blog.title}</h1>
         <hr />
-        <div dangerouslySetInnerHTML={{__html: theBlog.html}} />
+        <div dangerouslySetInnerHTML={{__html: blog.html}} />
       </div>
 
     )

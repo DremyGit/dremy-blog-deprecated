@@ -2,33 +2,65 @@ import fetch from 'isomorphic-fetch'
 
 import GlobalConst from '../constants/GlobalConst'
 import Page from '../utils/Page';
-import { BLOG_FETCH, BLOG_RECEIVE } from '../constants/BlogConst'
+import { BLOG_LIST_FETCH, BLOG_LIST_RECEIVE, BLOG_LIST_CLEAN,
+         BLOG_FETCH, BLOG_RECEIVE, BLOG_CLEAN } from '../constants/BlogConst'
 
-function requestBlogs() {
+function requestBlogList() {
+  return {
+    type: BLOG_LIST_FETCH
+  }
+}
+
+export function receiveBlogList(blogList) {
+  return {
+    type: BLOG_LIST_RECEIVE,
+    blogList
+  }
+}
+
+export function cleanBlogList() {
+  return {
+    type: BLOG_LIST_CLEAN
+  }
+}
+
+export function fetchBlogList(page = 1) {
+  return (dispatch) => {
+    dispatch(cleanBlogList());
+    dispatch(requestBlogList());
+    return fetch(GlobalConst.HOST + '/blogs?' + Page(page))
+      .then(response => response.json())
+      .then(json => dispatch(receiveBlogList(json.message, page)))
+      .catch()
+  }
+}
+
+function requestBlog() {
   return {
     type: BLOG_FETCH
   }
 }
 
-export function receiveBlogs(blogs, page) {
+export function receiveBlog(blog) {
   return {
     type: BLOG_RECEIVE,
-    blogs,
-    page,
-    recievedAt: Date.now()
+    blog
   }
 }
 
-export function fetchBlogs(page = 1) {
-  return (dispatch, getState) => {
-    let recievedAt = getState().blog.recievedAt;
-    if (recievedAt && Date.now() - recievedAt < 60 * 1000 && typeof getState().blog.page[page] != 'undefined') {
-      return;
-    }
-    dispatch(requestBlogs())
-    return fetch(GlobalConst.HOST + '/blogs?' + Page(page))
-      .then(response => response.json())
-      .then(json => dispatch(receiveBlogs(json.message, page)))
-      .catch()
+export function cleanBlog() {
+  return {
+    type: BLOG_CLEAN
+  }
+}
+
+export function fetchBlog(title) {
+  return (dispatch) => {
+    dispatch(cleanBlog());
+    dispatch(requestBlog());
+    return fetch(`${GlobalConst.HOST}/blogs?blog_title=${title}`)
+        .then(response => response.json())
+        .then(json => dispatch(receiveBlog(json.message)))
+        .catch()
   }
 }
